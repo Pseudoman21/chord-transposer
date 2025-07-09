@@ -296,7 +296,7 @@ export default function Component() {
           <div className="text-center text-xs sm:text-sm text-gray-500">
             <p>Tap the arrows to transpose to different keys</p>
             <p className="mt-1 hidden sm:block">Roman numerals show the chord function in the scale</p>
-            <p className="mt-4 hidden sm:block">Made with love by <Link className="font-semibold" href="https://github.com/Pseudoman21" target="_blank">Pseudoman21</Link></p>
+            <p className="lg:mt-4 block">Made with love by <Link className="font-semibold" href="https://github.com/Pseudoman21" target="_blank">Pseudoman21</Link></p>
           </div>
         </CardContent>
       </Card>
