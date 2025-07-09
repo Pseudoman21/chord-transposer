@@ -78,11 +78,30 @@ const getCirclePosition = (key: string) => {
   return positions[key] || "Unknown"
 }
 
+const getPentatonicPositions = (key: string) => {
+  const positions: { [key: string]: { position1: string, position2: string } } = {
+    C: { position1: "8th fret (E string)", position2: "3rd fret (A string)" },
+    "C#": { position1: "9th fret (E string)", position2: "4th fret (A string)" },
+    D: { position1: "10th fret (E string)", position2: "5th fret (A string)" },
+    "D#": { position1: "11th fret (E string)", position2: "6th fret (A string)" },
+    E: { position1: "12th fret (E string)", position2: "7th fret (A string)" },
+    F: { position1: "1st fret (E string)", position2: "8th fret (A string)" },
+    "F#": { position1: "2nd fret (E string)", position2: "9th fret (A string)" },
+    G: { position1: "3rd fret (E string)", position2: "10th fret (A string)" },
+    "G#": { position1: "4th fret (E string)", position2: "11th fret (A string)" },
+    A: { position1: "5th fret (E string)", position2: "12th fret (A string)" },
+    "A#": { position1: "6th fret (E string)", position2: "1st fret (A string)" },
+    B: { position1: "7th fret (E string)", position2: "2nd fret (A string)" },
+  }
+  return positions[key] || { position1: "Unknown", position2: "Unknown" }
+}
+
 export default function Component() {
   const [currentKeyIndex, setCurrentKeyIndex] = useState(0)
 
   const currentKey = keys[currentKeyIndex]
   const currentChords = chordFamilies[currentKey as keyof typeof chordFamilies]
+  const pentatonicPositions = getPentatonicPositions(currentKey)
 
   const goToPreviousKey = () => {
     setCurrentKeyIndex((prev) => (prev - 1 + keys.length) % keys.length)
@@ -161,14 +180,10 @@ export default function Component() {
 
           {/* Musical Information */}
           <div className="bg-blue-50 rounded-lg p-4 mb-6 space-y-3">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+            {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
               <div className="text-center">
                 <div className="font-semibold text-blue-700">Key Signature</div>
                 <div className="text-gray-700">{getKeySignature(currentKey)}</div>
-              </div>
-              <div className="text-center">
-                <div className="font-semibold text-blue-700">Relative Minor</div>
-                <div className="text-gray-700">{getRelativeMinor(currentKey)}</div>
               </div>
               <div className="text-center">
                 <div className="font-semibold text-blue-700">Circle Position</div>
@@ -178,9 +193,30 @@ export default function Component() {
                 <div className="font-semibold text-blue-700">Common Progression</div>
                 <div className="text-gray-700">vi-IV-I-V</div>
               </div>
+            </div> */}
+
+            <div className="">
+              <div className="text-center">
+                <div className="font-semibold text-blue-700 mb-2">Pentatonic Scale Starting Positions:</div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+                  <div className="bg-white px-3 py-2 rounded-lg">
+                    <div className="font-medium text-gray-800">Position 1</div>
+                    <div className="text-gray-600">{pentatonicPositions.position1}</div>
+                  </div>
+                  <div className="bg-white px-3 py-2 rounded-lg">
+                    <div className="font-medium text-gray-800">Position 2</div>
+                    <div className="text-gray-600">{pentatonicPositions.position2}</div>
+                  </div>
+                </div>
+                <div className="text-xs text-gray-600 mt-2">Ideal root note positions for solos and scales</div>
+              </div>
             </div>
 
-            <div className="border-t border-blue-200 pt-3">
+            <div className="border-t border-blue-200 pt-3 flex flex-row justify-around">
+              <div className="text-center">
+                <div className="font-semibold text-blue-700">Relative Minor</div>
+                <div className="text-gray-700">{getRelativeMinor(currentKey)}</div>
+              </div>
               <div className="text-center">
                 <div className="font-semibold text-blue-700 mb-2">Popular Chord Progression in {currentKey}:</div>
                 <div className="flex justify-center gap-2 flex-wrap">
@@ -194,6 +230,7 @@ export default function Component() {
                 </div>
                 <div className="text-xs text-gray-600 mt-1">(vi - IV - I - V progression)</div>
               </div>
+
             </div>
           </div>
 
