@@ -102,6 +102,37 @@ export default function Component() {
   const currentKey = keys[currentKeyIndex]
   const currentChords = chordFamilies[currentKey as keyof typeof chordFamilies]
   const pentatonicPositions = getPentatonicPositions(currentKey)
+  
+  const getPreviousNaturalKey = () => {
+    let prevIndex = (currentKeyIndex - 1 + keys.length) % keys.length
+    let prevKey = keys[prevIndex]
+    
+    // Skip sharp keys, find the previous natural key
+    while (prevKey.includes("#") && prevIndex !== currentKeyIndex) {
+      prevIndex = (prevIndex - 1 + keys.length) % keys.length
+      prevKey = keys[prevIndex]
+    }
+    
+    return prevKey.includes("#") ? null : prevKey
+  }
+  
+  const getNextNaturalKey = () => {
+    let nextIndex = (currentKeyIndex + 1) % keys.length
+    let nextKey = keys[nextIndex]
+    
+    // Skip sharp keys, find the next natural key
+    while (nextKey.includes("#") && nextIndex !== currentKeyIndex) {
+      nextIndex = (nextIndex + 1) % keys.length
+      nextKey = keys[nextIndex]
+    }
+    
+    return nextKey.includes("#") ? null : nextKey
+  }
+  
+  const previousKey = getPreviousNaturalKey()
+  const nextKey = getNextNaturalKey()
+  const previousChords = previousKey ? chordFamilies[previousKey as keyof typeof chordFamilies] : null
+  const nextChords = nextKey ? chordFamilies[nextKey as keyof typeof chordFamilies] : null
 
   const goToPreviousKey = () => {
     setCurrentKeyIndex((prev) => (prev - 1 + keys.length) % keys.length)
@@ -125,6 +156,20 @@ export default function Component() {
         </CardHeader>
 
         <CardContent className="px-4 sm:px-6">
+          {/* Previous Key Preview */}
+          {previousKey && previousChords && (
+            <div className="text-center mb-4 opacity-50">
+              <div className="text-sm text-gray-500 mb-1">{previousKey} Major</div>
+              <div className="flex justify-center gap-1 flex-wrap">
+                {previousChords.map((chord, index) => (
+                  <span key={index} className="bg-gray-100 px-2 py-1 rounded text-xs font-medium text-gray-600">
+                    {chord}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Navigation and Key Display */}
           <div className="flex items-center justify-between mb-6 sm:mb-8">
             <Button
@@ -177,6 +222,20 @@ export default function Component() {
               ))}
             </div>
           </div>
+
+          {/* Next Key Preview */}
+          {nextKey && nextChords && (
+            <div className="text-center mb-6 opacity-50">
+              <div className="text-sm text-gray-500 mb-1">{nextKey} Major</div>
+              <div className="flex justify-center gap-1 flex-wrap">
+                {nextChords.map((chord, index) => (
+                  <span key={index} className="bg-gray-100 px-2 py-1 rounded text-xs font-medium text-gray-600">
+                    {chord}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Musical Information */}
           <div className="bg-blue-50 rounded-lg p-4 mb-6 space-y-3">
